@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Contract</title>
+    <script type="text/javascript" src="C:/Users/dell/Desktop/Test/node_modules/web3/dist/web3.js"></script>
+</head>
+<body>
+    <div>
+        <input type="text" name="name" placeholder="Enter name">
+        <button id="button">Set name</button>
+        <pre id="output"></pre>
+    </div>
+    <script type="text/javascript">
+        var web3;
+        if(typeof web !== "undefined"){
+            web3 = new Web3(web3.currentProvider);
+        }
+        else{
+            web3 = new Web3(web3.providers.HttpProvider("http://127.0.0.1:8545"))
+        }
+        web3.eth.defaultAccount = web3.eth.accounts[0];
+        var new_contract = Web3.eth.contract([
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "getName",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "string"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "constant": false,
+                    "inputs": [
+                        {
+                            "name": "_name",
+                            "type": "string"
+                        }
+                    ],
+                    "name": "setName",
+                    "outputs": [],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                }
+            ]);
+            var contract = new_contract.at("0x92Bc43bB84b1465D7D189117963dcE910B2F17bf");
+            var pre = document.getElementById("output");
+            var input = document.getElementById("input");
+            var button = document.getElementById("button");
+            
+            button.addEventListener("click",function() {
+                contract.setName(input.value);
+                output.innerHTML = contract.getName();
+            })
+            
+    </script>
+</body>
+</html>
